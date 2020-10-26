@@ -12,7 +12,6 @@ import Log, { LogConfig } from "./entities/Log";
     database: "db.sqlite",
     synchronize: true,
     entities: [User, Log],
-    logging: ["query"],
   });
 
   app.use(cors());
@@ -53,15 +52,15 @@ import Log, { LogConfig } from "./entities/Log";
 
   //CREATE
 
-  const parseDate = (dateInput:string) => {
-    let split = dateInput.split('-');
+  const parseDate = (dateInput: string) => {
+    let split = dateInput.split("-");
     let date = new Date();
-    let arr = split.map(s => parseInt(s));
+    let arr = split.map((s) => parseInt(s));
     date.setFullYear(arr[0]);
     date.setMonth(arr[1]);
     date.setDate(arr[2]);
     return date;
-  }
+  };
 
   app.post("/api/exercise/add", async (req, res) => {
     let user = await User.findOne({ _id: parseInt(req.body.userId) });
@@ -69,7 +68,7 @@ import Log, { LogConfig } from "./entities/Log";
       res.send("could not find user");
       return;
     }
-    
+
     let config: LogConfig = {
       description: req.body.description,
       duration: parseInt(req.body.duration),
@@ -81,7 +80,7 @@ import Log, { LogConfig } from "./entities/Log";
     let logsForUser = await Log.find({ where: { user: user } });
     res.json({
       ...user,
-      logs: logsForUser.map(l => ({...l, date: l.formattedDate})),
+      logs: logsForUser.map((l) => ({ ...l, date: l.formattedDate })),
     });
   });
 
